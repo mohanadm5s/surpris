@@ -28,50 +28,48 @@
             50% { background-color: red; }
             100% { background-color: black; }
         }
+        .fake-buttons {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .btn {
+            background: gray;
+            color: black;
+            padding: 10px 20px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1 id="hacked">YOU HAVE BEEN HACKED!</h1>
+    <h1 id="hacked">ERROR 404</h1>
     <p id="virus"></p>
-    <audio id="beep" src="https://www.fesliyanstudios.com/play-mp3/438" preload="auto"></audio>
-    <audio id="glitch" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto"></audio>
+
+    <!-- Fake Exit Buttons -->
+    <div class="fake-buttons">
+        <button class="btn" onclick="startPrank()">🔙 Back</button>
+        <button class="btn" onclick="startPrank()">❌ Close</button>
+    </div>
 
     <script>
+        let beepSound = new Audio("https://www.fesliyanstudios.com/play-mp3/438");
+        let glitchSound = new Audio("https://www.fesliyanstudios.com/play-mp3/4383");
+
         function playSound(sound) {
-            let audio = document.getElementById(sound);
-            audio.play();
+            sound.currentTime = 0;
+            sound.play();
         }
 
-        // PREVENT BACK BUTTON (Phones & Browsers)
-        history.pushState(null, null, location.href);
-        window.onpopstate = function() {
-            history.go(1);
-        };
-
-        // PREVENT CLOSING TAB (SPAM ALERTS)
-        window.onbeforeunload = function() {
-            return "Your system is being hacked!";
-        };
-
-        // TRY TO FORCE FULL SCREEN
-        function goFullscreen() {
-            let elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) {
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) {
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) {
-                elem.msRequestFullscreen();
-            }
-        }
-
-        setTimeout(() => {
-            goFullscreen();
-            playSound("beep");
+        function startPrank() {
+            document.querySelector(".fake-buttons").remove(); // Remove buttons to trap them
+            playSound(beepSound);
             document.body.classList.add("glitch");
-            document.getElementById("hacked").innerText = "ACCESSING FILES...";
+            document.getElementById("hacked").innerText = "YOU HAVE BEEN HACKED!";
             let virusText = document.getElementById("virus");
             virusText.style.display = "block";
 
@@ -90,19 +88,17 @@
             let index = 0;
             let textInterval = setInterval(() => {
                 virusText.innerText = messages[index];
-                playSound("glitch");
+                playSound(glitchSound);
                 index++;
                 if (index === messages.length) {
                     clearInterval(textInterval);
                     setTimeout(() => {
                         document.body.classList.remove("glitch");
                         document.body.innerHTML = '<h1 style="color:white; font-size:80px;">JUST KIDDING! 😂</h1>';
-                        window.onbeforeunload = null; // Allow closing the tab after prank
-                        history.pushState(null, null, document.URL); // Reset history
                     }, 4000);
                 }
-            }, 700); // Faster panic effect!
-        }, 1000);
+            }, 500);
+        }
     </script>
 </body>
 </html>
