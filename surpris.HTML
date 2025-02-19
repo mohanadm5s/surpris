@@ -6,16 +6,57 @@
     <title>Surprise 😈</title>
     <style>
         body {
-            background-color: white;
+            background-color: black;
+            color: red;
             text-align: center;
             font-size: 50px;
-            color: red;
-            margin-top: 20%;
             font-family: Arial, sans-serif;
+            margin-top: 20%;
+        }
+        #virus {
+            font-size: 30px;
+            color: lime;
+            display: none;
+        }
+        .loading {
+            font-size: 30px;
+            color: yellow;
         }
     </style>
 </head>
 <body>
-    <h1>YOU HAVE BEEN HACKED!</h1>
+    <h1 id="hacked">YOU HAVE BEEN HACKED!</h1>
+    <p id="loading" class="loading"></p>
+    <p id="virus"></p>
+
+    <script>
+        setTimeout(() => {
+            document.getElementById("hacked").innerText = "INSTALLING VIRUSES...";
+            let dots = 0;
+            let loadingText = document.getElementById("loading");
+            let virusText = document.getElementById("virus");
+
+            let interval = setInterval(() => {
+                dots = (dots + 1) % 4;
+                loadingText.innerText = "Loading" + ".".repeat(dots);
+            }, 500);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                loadingText.style.display = "none";
+                virusText.style.display = "block";
+                virusText.innerText = "Accessing Personal Data... 🔓";
+            }, 4000);
+
+            setTimeout(() => { virusText.innerText = "Encrypting Files... 🔥"; }, 6000);
+            setTimeout(() => { virusText.innerText = "Hacking Camera... 📷"; }, 8000);
+            setTimeout(() => { virusText.innerText = "Uploading Data to Dark Web... 😈"; }, 10000);
+
+            setTimeout(() => { 
+                virusText.innerText = "Just Kidding! 😂";
+                virusText.style.color = "white";
+            }, 12000);
+        }, 2000);
+    </script>
 </body>
 </html>
