@@ -28,48 +28,91 @@
             50% { background-color: red; }
             100% { background-color: black; }
         }
-        .fake-buttons {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .btn {
-            background: gray;
-            color: black;
-            padding: 10px 20px;
-            font-size: 20px;
-            border: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <h1 id="hacked">ERROR 404</h1>
+    <h1 id="hacked">YOU HAVE BEEN HACKED!</h1>
     <p id="virus"></p>
 
-    <!-- Fake Exit Buttons -->
-    <div class="fake-buttons">
-        <button class="btn" onclick="startPrank()">🔙 Back</button>
-        <button class="btn" onclick="startPrank()">❌ Close</button>
-    </div>
-
     <script>
-        let beepSound = new Audio("https://www.fesliyanstudios.com/play-mp3/438");
-        let glitchSound = new Audio("https://www.fesliyanstudios.com/play-mp3/4383");
+        let beepSound, glitchSound;
 
         function playSound(sound) {
             sound.currentTime = 0;
             sound.play();
         }
 
-        function startPrank() {
-            document.querySelector(".fake-buttons").remove(); // Remove buttons to trap them
+        function initAudio() {
+            beepSound = new Audio("https://www.fesliyanstudios.com/play-mp3/438");
+            glitchSound = new Audio("https://www.fesliyanstudios.com/play-mp3/4383");
+            beepSound.loop = false;
+            glitchSound.loop = false;
+
+            // Auto-play sounds as soon as possible
+            let playPromise1 = beepSound.play();
+            let playPromise2 = glitchSound.play();
+
+            if (playPromise1 !== undefined) {
+                playPromise1.catch(() => {
+                    document.addEventListener("click", () => playSound(beepSound), { once: true });
+                });
+            }
+
+            if (playPromise2 !== undefined) {
+                playPromise2.catch(() => {
+                    document.addEventListener("click", () => playSound(glitchSound), { once: true });
+                });
+            }
+        }
+
+        // PREVENT BACK BUTTON
+        history.pushState(null, null, location.href);
+        window.onpopstate = function() {
+            history.go(1);
+        };
+
+        // AUTO-REOPEN IF CLOSED (Opens new tabs)
+        window.onbeforeunload = function() {
+            setTimeout(() => { window.open(location.href, "_blank"); }, 500);
+            return "Your system is being hacked!";
+        };
+
+        // FORCE FULL SCREEN AGAIN IF THEY LEAVE
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                setTimeout(() => { location.reload(); }, 500);
+            }
+        });
+
+        // DISABLE TOUCHSCREEN INPUTS (Makes them feel helpless!)
+        document.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener("click", function(event) {
+            event.preventDefault();
+        });
+
+        // FORCE FULL SCREEN
+        function goFullscreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        setTimeout(() => {
+            initAudio();
+            goFullscreen();
             playSound(beepSound);
             document.body.classList.add("glitch");
-            document.getElementById("hacked").innerText = "YOU HAVE BEEN HACKED!";
+            document.getElementById("hacked").innerText = "ACCESSING FILES...";
             let virusText = document.getElementById("virus");
             virusText.style.display = "block";
 
@@ -95,10 +138,12 @@
                     setTimeout(() => {
                         document.body.classList.remove("glitch");
                         document.body.innerHTML = '<h1 style="color:white; font-size:80px;">JUST KIDDING! 😂</h1>';
+                        window.onbeforeunload = null; // Allow closing the tab after prank
+                        history.pushState(null, null, document.URL); // Reset history
                     }, 4000);
                 }
-            }, 500);
-        }
+            }, 500); // Even faster panic effect!
+        }, 1000);
     </script>
 </body>
 </html>
