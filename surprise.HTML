@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body {
+            background-color: black;
+            color: red;
+            text-align: center;
+            font-size: 50px;
+            font-family: Arial, sans-serif;
+            margin-top: 20%;
+            transition: background 0.1s;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none; /* Prevent text selection */
+            touch-action: none; /* Stops gestures */
+        }
+        #virus {
+            font-size: 30px;
+            color: lime;
+            display: none;
+        }
+        .glitch {
+            animation: glitch 0.1s infinite;
+        }
+        @keyframes glitch {
+            0% { background-color: black; }
+            50% { background-color: red; }
+            100% { background-color: black; }
+        }
+    </style>
+    <script>
+        // 🛑 TRYING TO LEAVE? PRANK RESTARTS! 🛑
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                location.reload(); // If they switch apps, prank restarts
+            }
+        });
+
+        // ❌ NO BACK BUTTON ❌
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+
+        // 🚨 BLOCK CLOSING TAB (WORKS ONLY ON ANDROID) 🚨
+        window.addEventListener("beforeunload", function (e) {
+            e.preventDefault();
+            e.returnValue = "";
+        });
+
+        let beepSound = new Audio("https://www.fesliyanstudios.com/play-mp3/438");
+        let glitchSound = new Audio("https://www.fesliyanstudios.com/play-mp3/4383");
+        let alarmSound = new Audio("https://www.fesliyanstudios.com/play-mp3/3935");
+
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        function startPrank() {
+            playSound(beepSound);
+            document.body.classList.add("glitch");
+            document.body.innerHTML = '<h1>YOU HAVE BEEN HACKED!</h1><p id="virus"></p>';
+
+            let virusText = document.getElementById("virus");
+            virusText.style.display = "block";
+
+            let messages = [
+                "📂 Scanning Personal Data...",
+                "🔍 Searching Passwords...",
+                "📸 Hacking Camera...",
+                "☠️ Installing Malware...",
+                "💀 Sending Data to Hackers...",
+                "🔔 Phone Access Granted...",
+                "📡 Connecting to Dark Web...",
+                "💣 Destroying System..."
+            ];
+            
+            let index = 0;
+            let textInterval = setInterval(() => {
+                virusText.innerText = messages[index];
+                playSound(glitchSound);
+                index++;
+                if (index === messages.length) {
+                    clearInterval(textInterval);
+                }
+            }, 300);
+        }
+
+        function triggerAlarm() {
+            playSound(alarmSound);
+            document.body.onclick = null; // Prevent multiple triggers
+
+            let virusText = document.getElementById("virus");
+            let messages = [
+                "⚠️ ERROR: SYSTEM BREACH!",
+                "🚨 WARNING! ALARM ACTIVATED!",
+                "💀 VIRUS SPREADING...",
+                "🔥 PHONE OVERLOAD...",
+                "⏳ ERROR: UNSTOPPABLE..."
+            ];
+            let index = 0;
+            let textInterval = setInterval(() => {
+                virusText.innerText = messages[index];
+                playSound(glitchSound);
+                index++;
+                if (index === messages.length) {
+                    clearInterval(textInterval);
+                    setTimeout(() => {
+                        document.body.classList.remove("glitch");
+                        document.body.innerHTML = '<h1 style="color:white; font-size:80px;">JUST KIDDING! 😂</h1>';
+                    }, 4000);
+                }
+            }, 300);
+        }
+
+        // Start prank immediately
+        setTimeout(() => {
+            startPrank();
+        }, 2000); // Prank starts after 2 seconds
+
+        // When they panic and TAP, the alarm goes off!
+        document.addEventListener("click", triggerAlarm);
+    </script>
+</head>
+<body>
+</body>
+</html>
