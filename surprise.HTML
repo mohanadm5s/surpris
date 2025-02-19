@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Breach</title>
+    <style>
+        body {
+            background-color: black;
+            color: red;
+            text-align: center;
+            font-size: 50px;
+            font-family: Arial, sans-serif;
+            margin-top: 20%;
+            transition: background 0.1s;
+        }
+        #virus {
+            font-size: 30px;
+            color: lime;
+            display: none;
+        }
+        .glitch {
+            animation: glitch 0.1s infinite;
+        }
+        @keyframes glitch {
+            0% { background-color: black; }
+            50% { background-color: red; }
+            100% { background-color: black; }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="hacked">YOU HAVE BEEN HACKED!</h1>
+    <p id="virus"></p>
+    <audio id="beep" src="https://www.fesliyanstudios.com/play-mp3/438" preload="auto"></audio>
+    <audio id="glitch" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto"></audio>
+
+    <script>
+        function playSound(sound) {
+            let audio = document.getElementById(sound);
+            audio.play();
+        }
+
+        setTimeout(() => {
+            playSound("beep");
+            document.body.classList.add("glitch");
+            alert("⚠️ Your phone is infected! Click OK to remove the virus.");
+            document.getElementById("hacked").innerText = "ACCESSING FILES...";
+            let virusText = document.getElementById("virus");
+            virusText.style.display = "block";
+
+            let messages = [
+                "📂 Scanning Personal Data...",
+                "🔍 Searching Passwords...",
+                "📸 Hacking Camera...",
+                "☠️ Installing Malware...",
+                "💀 Sending Data to Hackers..."
+            ];
+            
+            let index = 0;
+            let textInterval = setInterval(() => {
+                virusText.innerText = messages[index];
+                playSound("glitch");
+                index++;
+                if (index === messages.length) {
+                    clearInterval(textInterval);
+                    setTimeout(() => {
+                        document.body.classList.remove("glitch");
+                        document.body.innerHTML = '<h1 style="color:white; font-size:80px;">JUST KIDDING! 😂</h1>';
+                    }, 1500);
+                }
+            }, 1000); // Now it changes every 1 second (faster!)
+        }, 2000);
+    </script>
+</body>
+</html>
